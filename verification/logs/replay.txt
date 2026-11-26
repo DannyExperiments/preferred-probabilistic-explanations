@@ -1,0 +1,4 @@
+One assessment: all 256 truth tables, 32 terms and 64 valuations.
+Listed distribution: all 256 truth tables, 32 terms and 128 valuations.
+Illustration: 3/5 without entailment; 2/5 with entailment; 1/5 tie.
+Two positive points: all 16 paired SAT–UNSAT truth tables and subset certificates.

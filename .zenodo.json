@@ -1,0 +1,31 @@
+{
+  "title": "Recognizing preferred explanations in probabilistic abduction",
+  "upload_type": "software",
+  "publication_date": "2026-11-27",
+  "version": "1.0.0",
+  "creators": [
+    {
+      "name": "DannyExperiments"
+    }
+  ],
+  "keywords": [
+    "probabilistic abduction",
+    "preferred explanations",
+    "polynomial hierarchy",
+    "quantified Boolean formulas",
+    "explicit support",
+    "classical entailment",
+    "decision complexity"
+  ],
+  "description": "<p>This note resolves the exact preferred-solution recognition question posed by Flaminio, Inoue and Kozhemiachenko in Section 7 of Probabilistic Abduction in a Fuzzy Logic Framework (KR 2026). Their Theorem 11(2) proves membership in Π₂ᴾ. The new reductions give Π₂ᴾ-hardness in two input models, with positive hypothesis literals and a candidate guaranteed to be valid.</p><p>For one rational event assessment, pin two-thirds of the probability on a satisfiable event that implies every selector-only term and excludes the fallback. The remaining one-third can certify theory-positivity for consistent terms. Exclusive selector pairs encode partial existential assignments. The observation tests every completion and every universal assignment. A satisfying quantified input gives a rival that beats the fallback under every coherent measure, while every rival containing the fallback is bounded by the fallback itself.</p><p>A separate construction makes the theory a tautology and specifies a unique distribution over 2n + 1 complete assignments. Every listed valuation satisfies the observation. For nonempty selector terms the mass drops by one unit for each selected literal. Strict improvement over the fallback bounds the number of selectors above, while all-valuation entailment requires each pair to be covered. Exactly one selector per pair then encodes the existential assignment. The supplement also classifies fixed maximum support size k ≥ 2 as DP-complete, or NP-complete when candidate validity is promised. At one support point the problem is ordinary recognition and is coNP-complete, as follows from the source&#x27;s point-mass lower bound.</p><p>The deposit includes the paper and source, a standard-library exact census, the explicit-support supplement, a rotating worked example and an offline explorer. The replay checks all 256 truth tables on two existential bits and one universal bit in each reduction, 16 two-point paired satisfiability cases, and the illustration. The proof concerns unconditional term masses compared rival by rival and classical entailment over all valuations. External peer review and formal verification are pending.</p><p>ChatGPT Astra 6.2 (OpenAI) generated the recovered proof, explicit-support supplement and original replays under human direction. OpenAI Codex independently reviewed the mathematics. GPT-6.2 Sol (OpenAI) checked primary sources and prepared the manuscript, extended replay and illustration. DannyExperiments is the project citation identity.</p>",
+  "access_right": "open",
+  "license": "other-closed",
+  "notes": "All rights reserved. Publicly downloadable files are supplied without a repository-wide reuse license.",
+  "related_identifiers": [
+    {
+      "identifier": "https://github.com/DannyExperiments/preferred-probabilistic-explanations/releases/tag/v1.0.0",
+      "relation": "isSupplementTo",
+      "resource_type": "software"
+    }
+  ]
+}

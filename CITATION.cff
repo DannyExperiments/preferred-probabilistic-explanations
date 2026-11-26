@@ -1,0 +1,29 @@
+cff-version: 1.2.0
+message: "Cite this version of the research release."
+type: software
+title: "Recognizing preferred explanations in probabilistic abduction"
+authors:
+  - name: "DannyExperiments"
+version: "1.0.0"
+date-released: 2026-11-27
+doi: "10.5281/zenodo.24572562"
+url: "https://doi.org/10.5281/zenodo.24572562"
+repository-code: "https://github.com/DannyExperiments/preferred-probabilistic-explanations"
+keywords:
+  - "probabilistic abduction"
+  - "preferred explanations"
+  - "polynomial hierarchy"
+  - "quantified Boolean formulas"
+  - "explicit support"
+  - "classical entailment"
+  - "decision complexity"
+preferred-citation:
+  type: software
+  title: "Recognizing preferred explanations in probabilistic abduction"
+  authors:
+    - name: "DannyExperiments"
+  version: "1.0.0"
+  date-released: 2026-11-27
+  doi: "10.5281/zenodo.24572562"
+  url: "https://doi.org/10.5281/zenodo.24572562"
+  repository-code: "https://github.com/DannyExperiments/preferred-probabilistic-explanations"

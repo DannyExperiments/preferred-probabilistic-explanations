@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Which explanations beat the fallback?</title>
+<style>
+:root {color-scheme:dark;--bg:#101b32;--panel:#162640;--edge:#3d567a;--text:#f7faff;--muted:#c1cde0;--mint:#6aead7;--amber:#ffcf83;--red:#ffb8ae}
+* {box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:16px/1.5 system-ui,sans-serif}
+main{max-width:660px;margin:auto;padding:22px 16px 34px}
+header p{color:var(--muted);margin:.45rem 0 1.1rem}
+h1{font-size:clamp(1.72rem,5.2vw,2.6rem);line-height:1.12;margin:0}
+.tools{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:.3rem 0 .8rem}
+button{min-width:46px;min-height:46px;border:1px solid var(--edge);border-radius:10px;background:#223451;color:var(--text);padding:7px 12px;font:inherit;font-weight:650;cursor:pointer}
+button[aria-pressed=true]{background:var(--mint);color:var(--bg);border-color:var(--mint)}
+button:focus-visible,#support:focus-visible{outline:3px solid var(--amber);outline-offset:2px}
+.canvas{background:var(--panel);border:1px solid var(--edge);border-radius:16px;overflow:hidden}
+#support{display:block;width:100%;height:auto;touch-action:pan-y;cursor:grab}
+#support:active{cursor:grabbing}
+#support:focus-visible{outline-offset:-5px}
+#plot text{font-family:system-ui,sans-serif;font-size:19px;text-anchor:middle;fill:var(--text)}
+.summary{margin-top:12px;background:var(--panel);border:1px solid var(--edge);border-radius:13px;padding:12px}
+.summary p{margin:.16rem 0}
+.term{color:var(--muted)} .amount{font-size:1.35rem;font-weight:750}
+.win{color:var(--mint)}.tie{color:var(--amber)}.fail{color:var(--red)}
+details{margin-top:1.15rem;color:var(--muted)}
+summary{cursor:pointer;color:var(--text);font-weight:700}
+sub{line-height:0}
+</style>
+</head>
+<body>
+<main>
+<header>
+<h1>Which explanations beat the fallback?</h1>
+<p>One point belongs to the fallback s. Each other point makes exactly one selector false. Every point has mass 1/5.</p>
+</header>
+<div class="tools" role="group" aria-label="Toggle selectors for the term">
+  <button id="a1" aria-pressed="true" aria-label="Selector a1">a<sub>1</sub></button>
+  <button id="b1" aria-pressed="false" aria-label="Selector b1">b<sub>1</sub></button>
+  <button id="a2" aria-pressed="false" aria-label="Selector a2">a<sub>2</sub></button>
+  <button id="b2" aria-pressed="true" aria-label="Selector b2">b<sub>2</sub></button>
+  <button id="reset" aria-label="Reset selectors and rotation">Reset</button>
+</div>
+<div class="canvas">
+  <svg id="support" viewBox="0 0 470 248" tabindex="0" role="img" aria-labelledby="plotTitle plotDesc">
+    <title id="plotTitle">Rotatable diagram of five support points</title>
+    <desc id="plotDesc">Bright prisms are the points satisfying the term. The four one-zero points are named for the selector they omit.</desc>
+    <g id="plot"></g>
+  </svg>
+</div>
+<div class="summary" aria-live="polite" aria-atomic="true">
+  <p class="term" id="term"></p>
+  <p class="amount" id="amount"></p>
+  <p id="verdict"></p>
+  <p id="reason"></p>
+</div>
+<details>
+  <summary>Observation used in this example</summary>
+  <p>The observation is true if s or the guard u is true. Otherwise each pair must be covered, and either some pair is doubled or the truth assignment has x₁ true and x₂ false. Choosing a<sub>i</sub> encodes x<sub>i</sub> true, while choosing b<sub>i</sub> encodes x<sub>i</sub> false if exactly one per pair stays true.</p>
+  <p>All five supported valuations have u true. Classical entailment still checks valuations with u false. A term with no surviving support fails the positive-probability condition, even when its literals entail the observation.</p>
+  <p>Drag sideways or use Left and Right arrow keys while the diagram is focused.</p>
+</details>
+</main>
+<script>
+"use strict";
+const byId = id => document.getElementById(id);
+const names = ["a1","b1","a2","b2"];
+const symbols = ["a₁","b₁","a₂","b₂"];
+const labels = ["s",...symbols];
+const colors = [
+  ["#349c9a","#257176","#6aead7"], ["#ae7545","#785e50","#ffcf83"],
+  ["#334360","#2b3753","#647491"], ["#53475a","#433c53","#9d806e"]
+];
+let mask = 9;
+let angle = .24;
+let dragging = null;
+const svg = byId("support");
+const layer = byId("plot");
+const polygon = (points, fill) => "<polygon points=\"" + points.map(p => p.join(",")).join(" ") + "\" fill=\"" + fill + "\" stroke=\"#172640\"/>";
+function render() {
+  const keep = [mask === 0, ...names.map((_,i) => !(mask & (1<<i)))];
+  const count = keep.filter(Boolean).length;
+  const covered = (mask & 3) && (mask & 12);
+  const doubled = (mask & 3) === 3 || (mask & 12) === 12;
+  const entails = covered && (doubled || mask === 9);
+  const solution = entails && count > 0;
+  const state = !solution ? "fail" : count > 1 ? "win" : "tie";
+  const chosen = symbols.filter((_,i) => (mask & (1<<i)));
+  names.forEach((name,i) => byId(name).setAttribute("aria-pressed", Boolean(mask & (1<<i))));
+  byId("term").textContent = chosen.length ? chosen.join(" ∧ ") : "Empty term";
+  byId("amount").textContent = (count === 5 ? "1" : count + "/5") + " vs 1/5";
+  byId("amount").className = "amount " + state;
+  byId("verdict").textContent = !entails ? "Fails entailment" : !count ? "Fails positive mass" : count > 1 ? "Defeats the fallback" : "Ties the fallback";
+  byId("reason").textContent = !covered ? "A pair can be absent in a valuation with s = u = 0." :
+    !entails ? "The encoded assignment fails the observation." :
+    !count ? "Every listed point is excluded." :
+    doubled ? "A doubled pair satisfies the clash condition." :
+    "The encoded assignment satisfies the observation.";
+  const points = labels.map((label,j) => {
+    const theta = angle + j * 2 * Math.PI / 5;
+    return {x:235+151*Math.cos(theta),y:143+62*Math.sin(theta),j,label};
+  });
+  let drawing = polygon(points.map(p => [p.x,p.y]),"#203755");
+  for (const {x,y,j,label} of [...points].sort((a,b) => a.y-b.y)) {
+    const top = [[x-18,y-37],[x,y-47],[x+18,y-37],[x,y-27]];
+    const parts = [[top[0],top[3],[x,y],[x-18,y-10]], [top[3],top[2],[x+18,y-10],[x,y]], top];
+    const shades = colors[(keep[j] ? 0 : 2) + (j === 0 ? 1 : 0)];
+    drawing += parts.map((p,i) => polygon(p,shades[i])).join("");
+    drawing += "<text x=\"" + x + "\" y=\"" + (y+20) + "\">" + label + "</text>";
+  }
+  layer.innerHTML = drawing;
+}
+names.forEach((name,i) => byId(name).addEventListener("click",() => {mask ^= 1<<i;render();}));
+byId("reset").addEventListener("click",() => {mask=9;angle=.24;render();});
+svg.addEventListener("pointerdown",event => {dragging=event.clientX;svg.setPointerCapture(event.pointerId);});
+svg.addEventListener("pointermove",event => {if(dragging !== null){angle+=(event.clientX-dragging)/85;dragging=event.clientX;render();}});
+svg.addEventListener("lostpointercapture",() => {dragging=null;});
+svg.addEventListener("keydown",event => {
+  if(event.key !== "ArrowLeft" && event.key !== "ArrowRight") return;
+  event.preventDefault();angle += event.key === "ArrowLeft" ? -.12 : .12;render();
+});
+render();
+</script>
+</body>
+</html>

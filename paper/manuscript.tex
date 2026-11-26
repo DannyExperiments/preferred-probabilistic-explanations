@@ -1,0 +1,94 @@
+\documentclass[11pt,a4paper]{amsart}
+\usepackage[hmargin=.83in,vmargin=.72in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{amssymb}
+\usepackage[hidelinks]{hyperref}
+\hypersetup{pdftitle={Recognizing preferred explanations in probabilistic abduction}}
+\urlstyle{same}
+\setlength{\emergencystretch}{2em}
+\DeclareMathSizes{8}{8}{8}{8}
+\DeclareMathSizes{9}{9}{8}{8}
+\DeclareMathSizes{10.95}{10.95}{8}{8}
+\renewcommand{\bibliofont}{\normalsize\raggedright}
+\newtheorem{theorem}{Theorem}
+\newcommand{\DP}{\mathrm{DP}}
+\newcommand{\NP}{\mathrm{NP}}
+\newcommand{\coNP}{\mathrm{coNP}}
+\newcommand{\supp}{\operatorname{supp}}
+\title[Preferred explanations in probabilistic abduction]{Recognizing preferred explanations in probabilistic abduction}
+\date{}
+\begin{document}
+\begin{abstract}
+Flaminio, Inoue and Kozhemiachenko proved that recognizing a preferred solution to a propositional probabilistic abduction problem is in $\Pi_2^{\mathrm P}$ and asked for the exact complexity. We prove $\Pi_2^{\mathrm P}$-completeness with one rational event assessment and an always-valid candidate. A separate reduction gives completeness for a uniquely specified distribution on polynomially many listed complete assignments, even with a tautological theory and a valid candidate. For fixed support size at most $k\geq2$, the problem is $\DP$-complete, or $\NP$-complete under the valid-candidate promise.
+\end{abstract}
+\maketitle
+
+\section{Recognition and the published upper bound}
+The question is in Section~7 of Flaminio, Inoue and Kozhemiachenko \cite[p.~324]{fik}. In their Definitions~23 and~24, the input is a finite propositional theory, written as one formula $\varphi$, an observation $\chi$, a finite set $H$ of literals, and rational assessments $p(E)$ for finitely many propositional events $E$. All hypothesis and event variables occur in $\varphi$ or $\chi$. A designated term $\tau$ is a conjunction of literals from $H$; we permit the empty conjunction. A probability measure $\mu$ over all valuations is coherent if it realizes all assessments. Write $\mu(\alpha)$ for the probability that formula $\alpha$ is true.
+
+A term $T$ is a solution if $\varphi\land T\models\chi$ and $\mu(\varphi\land T)>0$ for some coherent $\mu$. A solution $\tau$ is preferred if for every solution $T$ some coherent measure $\mu$ has $\mu(\tau)\geq\mu(T)$. That measure may depend on $T$. In particular, $T$ defeats $\tau$ exactly when the comparison is strict in $T$'s favor under every coherent measure. The probabilities in the comparison are unconditional term probabilities. The positivity requirement uses $\varphi\land T$.
+
+Theorem~11(2) of \cite[p.~323]{fik} proves membership in $\Pi_2^{\mathrm P}$. Their same theorem classifies ordinary solution recognition and existence. For listed complete assignments of total assessed mass one, their Theorem~12 gives $\coNP$-completeness of ordinary solution recognition. They also discuss minimum-cardinality preference from classical abduction \cite[Section~4.2]{eg}. A uniform joint distribution ranks consistent terms by their sizes, but listing every valuation can require exponential length. Our reductions give separate, polynomial-size inputs under the two assessment conventions.
+
+\section{One assessment}
+\begin{theorem}
+Preferred-solution recognition is $\Pi_2^{\mathrm P}$-complete with a single assessed event of probability $2/3$, positive hypothesis literals, and the promise that the designated candidate is a solution.
+\end{theorem}
+\begin{proof}
+Reduce from falsity of the $\Sigma_2^{\mathrm P}$-complete quantified-formula problem $\exists X\,\forall Y\,F(X,Y)$. Pad the existential block to at least one variable if needed. For each $x_i$ introduce fresh selectors $a_i,b_i$, and use a fresh fallback variable $s$. Replace $X$ by the $a_i$ in $F$. Set
+\[
+\begin{gathered}
+\varphi=\bigwedge_i(a_i\mathbin{\mathrm{XOR}}b_i),\qquad
+\chi=s\lor F(a,Y),\qquad H=\{s\}\cup\{a_i,b_i:i=1,\ldots,n\},\\
+\tau=s,\qquad D=\neg s\land\bigwedge_i(a_i\land b_i),\qquad p(D)=2/3.
+\end{gathered}
+\]
+Quantified variables unused in the formula may be dropped or included through syntactic tautologies. The event $D$ is satisfiable and disjoint from $s$ and $\varphi$. A coherent measure can put $2/3$ on a valuation in $D$ and $1/3$ on a valuation satisfying $\varphi\land s$. Together with the $s$ disjunct of $\chi$, this proves validity of $\tau$.
+
+Every term containing $s$ is a subevent of $\tau$. Every term using selectors alone contains all valuations of $D$. For such a term $T$, every coherent $\mu$ has $\mu(T)\geq 2/3$ and $\mu(\tau)\leq1/3$. Consequently $\tau$ is preferred exactly when there is no solution using selectors alone.
+
+A term selecting both members of a pair has $\varphi\land T$ unsatisfiable. Otherwise $T$ fixes a partial assignment to $X$. A completion provides a valuation of $\varphi\land T$ to receive the residual $1/3$ mass, so positivity is automatic. At $s=0$, the valuations satisfying $\varphi\land T$ run through all completions of that assignment and all values of $Y$. At $s=1$, $\chi$ already holds. Thus $T$ entails $\chi$ under $\varphi$ exactly when every completion and every $Y$ satisfy $F$. A full witness to the quantified formula gives a term of this kind. Conversely, any such partial term has a full completion that witnesses the quantified formula. This includes the empty selector term. Preferred recognition is therefore equivalent to falsity of the quantified input. The construction is polynomial and the published upper bound applies.
+\end{proof}
+
+\section{A listed distribution and tautological theory}
+\begin{theorem}
+Preferred-solution recognition is $\Pi_2^{\mathrm P}$-complete with an explicitly listed distribution, a tautological theory, positive hypothesis literals and an always-valid candidate. All listed valuations can be required to satisfy the observation.
+\end{theorem}
+\begin{proof}
+Take the same quantified-formula problem with $n\geq2$ after padding. Use fresh $s,u,a_i,b_i$. Write the theory as a conjunction of variable-wise tautologies so that all coordinates occur. Let $H=\{s\}\cup\{a_i,b_i:i=1,\ldots,n\}$, $\tau=s$, and
+\[
+ A=\bigwedge_i(a_i\lor b_i),\quad B=\bigvee_i(a_i\land b_i),
+ \qquad \chi=s\lor u\lor[A\land(B\lor F(a,Y))].
+\]
+List the complete valuation with $s=u=1$ and all other bits zero, giving it mass $(n-1)/(3n-1)$. For each of the $2n$ selectors $h$, also list the complete valuation with $s=0,u=1$, selector $h=0$, every other selector true, and all universal bits zero. Give each of these valuations mass $1/(3n-1)$. The list has polynomial length and the points are distinct. Their masses sum to one and specify a unique coherent distribution. Each point has $u=1$ and satisfies $\chi$. The candidate entails $\chi$ and has positive mass.
+
+Terms containing $s$ cannot beat its mass. A nonempty selector term using $m$ distinct selectors excludes the fallback point and exactly $m$ one-zero points. Its mass is $(2n-m)/(3n-1)$, so it beats the candidate exactly when $m\leq n$. If it misses a pair, setting both members of that pair and $s,u$ to zero gives a countervaluation to entailment. The empty term also misses a pair and fails entailment. Hence a better solution selects exactly one member of each pair.
+
+For such a term, $A$ holds throughout. Valuations with $s=1$, $u=1$, or some pair having both selectors true satisfy $\chi$. In the remaining valuations each pair has exactly one true variable, enforcing the unique assignment to $a$ encoded by the term. All $Y$ remain free. Thus the term entails $\chi$ exactly when the encoded $X$ witnesses $\forall Y\,F(X,Y)$. Its mass is $n/(3n-1)$. Falsity is equivalent to preference, and Theorem~11(2) gives the matching upper bound.
+\end{proof}
+
+\subsection*{Two selector pairs}
+For $n=2$ take $F(x,Y)=x_1\land\neg x_2$. The five support points each have mass $1/5$. Term $a_1$ keeps three points, but setting $s=u=a_2=b_2=0$ and $a_1=1$ refutes the observation. Term $a_1\land b_2$ keeps two points, entails the observation, and defeats $s$ of mass $1/5$. Term $a_1\land b_1\land a_2$ entails the observation via the clash disjunct but keeps only one point, tying $s$. The countervaluation demonstrates why entailment must inspect valuations beyond the positive support even though probabilities use only listed points.
+
+\section{Fixed support size}
+\begin{theorem}
+For every fixed integer $k\geq2$, preferred-solution recognition under an explicitly listed distribution with at most $k$ positive support points is $\DP$-complete, and is $\NP$-complete with the promise that the candidate is a solution. For $k=1$ ordinary and preferred recognition coincide and are $\coNP$-complete.
+\end{theorem}
+\begin{proof}
+Let $\theta=\mu(\tau)$ and enumerate subsets $S$ of the support with $\mu(S)>\theta$ and at least one point satisfying $\varphi$. Let $T(S)$ conjoin all allowed literals true at every point of $S$. If $\varphi\land T(S)\models\chi$, that term is a positive-mass solution and has mass above $\theta$. Conversely, from a better solution take all support points satisfying it. They form a qualifying $S$ and $T(S)$ implies the better term, so entails $\chi$ under the theory. Thus absence of a better term has an $\NP$ certificate: a countervaluation for $\varphi\land T(S)\models\chi$ for each qualifying $S$. There are only constantly many subsets because $k$ is fixed. Candidate validity is in $\coNP$ because its positivity is directly checkable. Their intersection gives the $\DP$ upper bound, and the validity promise gives the $\NP$ upper bound.
+
+For the lower bounds use the $\DP$-complete paired problem asking whether $F$ is satisfiable and $G$ is unsatisfiable. Use disjoint variables, fresh $s,t,u$, $H=\{s,t\}$, $\tau=s$, $\varphi=\neg(s\land t)$, and
+\[
+\chi=[s\land(u\lor\neg G)]\lor[\neg s\land t\land(u\lor\neg F)].
+\]
+Complete the points $(s,t,u)=(1,0,1),(0,1,1)$ by setting all other variables to zero and give them mass $1/3,2/3$, respectively. The candidate is valid iff $G$ is unsatisfiable. A better solution must cover the heavier point. If one exists, extending it by $t$ still covers that point and preserves entailment. Only the empty term and $t$ can cover that point, so a better term exists precisely when $\varphi\land t\models\chi$, equivalently when $F$ is unsatisfiable. The candidate is preferred exactly on the paired yes-instances. Fix $G$ to a contradiction to obtain the $\NP$ lower bound under the promise. For one point every valid term has mass one. The one-point ordinary recognition lower bound immediately before Theorem~12 of \cite[p.~323]{fik} therefore applies.
+\end{proof}
+
+\section*{Replay and technical disclosure}
+The accompanying standard-library replay checks both selector reductions over all 256 truth tables on two existential bits and one universal bit, finite paired satisfiability instances for the bounded-support construction, and the numerical illustration. The universal claims are proved above. External peer review and formal verification are pending.
+
+ChatGPT Astra 6.2 (OpenAI) generated the recovered proof, explicit-support supplement and original replays under human direction. OpenAI Codex independently reviewed the mathematics. GPT-6.2 Sol (OpenAI) checked primary sources and prepared the manuscript, extended replay and illustration. DannyExperiments is the project citation identity.
+
+\bibliographystyle{amsplain}
+\bibliography{references}
+\end{document}
