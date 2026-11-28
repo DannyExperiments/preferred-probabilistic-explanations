@@ -1,5 +1,6 @@
 # Recognizing preferred explanations in probabilistic abduction
 
+[![Lean · support saturation](https://github.com/DannyExperiments/preferred-probabilistic-explanations/actions/workflows/lean.yml/badge.svg?branch=main)](https://github.com/DannyExperiments/preferred-probabilistic-explanations/actions/workflows/lean.yml)
 [![Repository verification](https://github.com/DannyExperiments/preferred-probabilistic-explanations/actions/workflows/verify.yml/badge.svg?branch=main)](https://github.com/DannyExperiments/preferred-probabilistic-explanations/actions/workflows/verify.yml) [![Replay verification](https://github.com/DannyExperiments/preferred-probabilistic-explanations/actions/workflows/replay.yml/badge.svg?branch=main)](https://github.com/DannyExperiments/preferred-probabilistic-explanations/actions/workflows/replay.yml) [![PDF build](https://github.com/DannyExperiments/preferred-probabilistic-explanations/actions/workflows/pdf.yml/badge.svg?branch=main)](https://github.com/DannyExperiments/preferred-probabilistic-explanations/actions/workflows/pdf.yml)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.24572562.svg)](https://doi.org/10.5281/zenodo.24572562)
 
@@ -24,3 +25,7 @@ Definition 24 requires classical entailment plus positive mass jointly with the 
 [Mathematical audit](audits/public_safe_reports/MATHEMATICAL_AUDIT.md) · [Literature audit](audits/public_safe_reports/LITERATURE_AUDIT.md) · [Scope](CLAIM_SCOPE_AND_LIMITATIONS.md) · [AI disclosure](AI_DISCLOSURE.md) · [Status](STATUS.md)
 
 [Release v1.0.0](https://github.com/DannyExperiments/preferred-probabilistic-explanations/releases/tag/v1.0.0) · [Version DOI](https://doi.org/10.5281/zenodo.24572562) · [Citation](CITATION.cff)
+
+## Lean verification
+
+A heavier term with a supported theory witness and entailment throughout the theory exists exactly when a heavier subset of the support has such a witness and its common-literal closure entails the observation throughout the theory. The weight threshold is modeled by an upward-closed predicate. The support-size complexity bounds and hardness constructions are proved in the paper. [Lean source and replay](formalization/README.md)
